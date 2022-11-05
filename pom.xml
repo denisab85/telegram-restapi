@@ -4,43 +4,68 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <groupId>ca.denisab85</groupId>
+  <artifactId>telegram-restapi</artifactId>
+  <version>0.0.1</version>
+  <packaging>jar</packaging>
+
+  <name>Telegram REST API</name>
+  <description>A Spring Boot REST service for the Telegram messenger native API</description>
+  <url>https://github.com/denisab85/telegram-restapi</url>
+
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.7.4</version>
-    <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
-  <groupId>ca.denisab85</groupId>
-  <artifactId>telegram-backup</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>telegram-backup</name>
-  <description>telegram-backup</description>
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Denis Abakumov</name>
+      <email>denisab85@gmail.com</email>
+      <organization>denisab85</organization>
+      <organizationUrl>https://github.com/denisab85</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/denisab85/telegram-restapi.git</connection>
+    <developerConnection>scm:git:ssh://github.com:denisab85/telegram-restapi.git
+    </developerConnection>
+    <url>https://github.com/denisab85/telegram-restapi/tree/master</url>
+  </scm>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
 
   <properties>
     <java.version>1.8</java.version>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <okhttp.version>4.10.0</okhttp.version>
     <retrofit.version>2.9.0</retrofit.version>
     <tdlib.version>v1.8.0-20221029</tdlib.version>
+    <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+    <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+    <maven-javadoc-plugin.version>3.4.1</maven-javadoc-plugin.version>
+    <sign-maven-plugin.version>1.0.1</sign-maven-plugin.version>
   </properties>
-
-  <distributionManagement>
-    <repository>
-      <id>github</id>
-      <name>GitHub Packages</name>
-      <url>https://maven.pkg.github.com/denisab85/telegram-restapi</url>
-    </repository>
-  </distributionManagement>
-
-  <repositories>
-    <repository>
-      <id>github</id>
-      <name>GitHub Packages</name>
-      <url>https://maven.pkg.github.com/denisab85/td</url>
-    </repository>
-  </repositories>
 
   <dependencies>
     <!--        <dependency>-->
@@ -134,7 +159,7 @@
     <!--      <scope>test</scope>-->
     <!--    </dependency>-->
     <dependency>
-      <groupId>org.drinkless</groupId>
+      <groupId>ca.denisab85</groupId>
       <artifactId>tdlib</artifactId>
       <version>${tdlib.version}</version>
     </dependency>
@@ -174,6 +199,64 @@
             </exclude>
           </excludes>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.13</version>
+        <extensions>true</extensions>
+        <configuration>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>${maven-source-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${maven-javadoc-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>${maven-jar-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.simplify4u.plugins</groupId>
+        <artifactId>sign-maven-plugin</artifactId>
+        <version>${sign-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

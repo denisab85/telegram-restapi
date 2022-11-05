@@ -20,40 +20,30 @@ public interface TelegramRestApiConnector {
 
   /**
    * Retrieve the running/authorized state of the service.
-   *
-   * @return GetStateResponse
    */
   @GET("/auth/state")
   Call<GetStateResponse> getState();
 
   /**
    * Start the service and initialize authentication (if necessary).
-   *
-   * @return GetStateResponse
    */
   @POST("/auth/start")
   Call<GetStateResponse> start();
 
   /**
    * Retrieve SMS code for authentication.
-   *
-   * @return GetStateResponse
    */
   @GET("/auth/getSmsCode")
   Call<String> getSmsCode();
 
   /**
    * Retrieve the IDs of all chats from the main chat list.
-   *
-   * @return List<Long>
    */
   @GET("/chats")
   Call<List<Long>> getChatIds(@Query("limit") int limit);
 
   /**
    * Retrieve messages for a specific chat ID.
-   *
-   * @return List<Long>
    */
   @GET("/chat/{chatId}/history")
   Call<List<Message>> getChatHistory(@Path("testCaseKey") long chatId,

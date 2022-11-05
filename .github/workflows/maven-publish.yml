@@ -26,7 +26,21 @@ jobs:
           distribution: 'temurin'
           overwrite-settings: true
 
-      - name: Publish to GitHub Packages Maven
-        run: mvn --batch-mode deploy
+      - name: Prepare Maven's settings.xml
+        uses: s4u/maven-settings-action@v2.7.0
+        with:
+          override: true
+          servers: '[
+            { "id": "ossrh", "username": "denisab85", "password": "${{ secrets.OSSRH_TOKEN }}" }
+          ]'
+
+      - name: Deploy the package
+        run: |
+          sed -i 's/${RELEASE_VERSION}/${{ github.ref_name }}/' pom.xml
+          mvn --no-transfer-progress --batch-mode clean deploy
+        shell: sh
+        working-directory: ${{ github.workspace }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SIGN_KEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
+          SIGN_KEY_ID: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
+          SIGN_KEY_PASS: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
