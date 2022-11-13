@@ -1,7 +1,6 @@
 package ca.denisab85.telegram.restapi.server.application.rest;
 
 import ca.denisab85.telegram.restapi.server.domain.model.rest.GetStateResponse;
-import ca.denisab85.telegram.restapi.server.domain.service.AuthorizationService;
 import ca.denisab85.telegram.restapi.server.domain.service.TelegramClientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +19,17 @@ public class AuthorizationController {
   @Autowired
   TelegramClientService telegramClientService;
 
-  @Autowired
-  AuthorizationService authorizationService;
-
   @GetMapping(value = "/state")
   public ResponseEntity<GetStateResponse> getState() {
     return ResponseEntity.ok().body(new GetStateResponse(telegramClientService.isRunning(),
-        authorizationService.isAuthenticated()));
+        telegramClientService.isAuthenticated()));
   }
 
   @PostMapping(value = "/start")
   public ResponseEntity<GetStateResponse> start() throws InterruptedException {
     telegramClientService.start();
     return ResponseEntity.ok().body(new GetStateResponse(telegramClientService.isRunning(),
-        authorizationService.isAuthenticated()));
+        telegramClientService.isAuthenticated()));
   }
 
   @GetMapping(value = "/getSmsCode")
